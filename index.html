@@ -1,173 +1,177 @@
+
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WeatherX | Weather Application</title>
 
-    <title>WeatherX | Weather App</title>
-
-    <!-- Font Awesome -->
     <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
-    <!-- CSS -->
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-    <!-- Main Container -->
-    <div class="weather-app">
+<div class="weather-app">
 
-        <!-- Sidebar -->
-        <aside class="sidebar">
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
 
-            <div class="logo">
-                <i class="fa-solid fa-cloud-sun"></i>
-                <h1>Weather<span>X</span></h1>
+        <div class="logo">
+            <i class="fa-solid fa-cloud-sun"></i>
+            <h1>Weather<span>X</span></h1>
+        </div>
+
+        <p class="tagline">
+            Know the Weather.<br>
+            Plan Your Day.
+        </p>
+
+        <nav class="navigation">
+
+            <a href="#home" class="nav-link active" data-page="home">
+                <i class="fa-solid fa-house"></i>
+                <span>Home</span>
+            </a>
+
+            <a href="#search" class="nav-link" data-page="search">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <span>Search</span>
+            </a>
+
+            <a href="#map" class="nav-link" data-page="map">
+                <i class="fa-solid fa-location-dot"></i>
+                <span>Map</span>
+            </a>
+
+            <a href="#settings" class="nav-link" data-page="settings">
+                <i class="fa-solid fa-gear"></i>
+                <span>Settings</span>
+            </a>
+
+            <a href="#about" class="nav-link" data-page="about">
+                <i class="fa-solid fa-circle-info"></i>
+                <span>About</span>
+            </a>
+
+        </nav>
+
+    </aside>
+
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+
+        <!-- TOP BAR -->
+        <header class="top-bar">
+
+            <form class="search-box" id="topSearchForm">
+
+                <i class="fa-solid fa-magnifying-glass"></i>
+
+                <input type="text"
+                    id="topSearchInput"
+                    placeholder="Search for a city...">
+
+                <button type="submit">Search</button>
+
+            </form>
+
+            <div class="location">
+                <i class="fa-solid fa-location-dot"></i>
+                <span id="currentLocation">Colombo, Sri Lanka</span>
             </div>
 
-            <p class="tagline">Know the Weather.<br>Plan Your Day.</p>
+            <button class="refresh-btn" id="refreshButton"
+                title="Refresh weather">
+                <i class="fa-solid fa-rotate"></i>
+            </button>
 
-            <nav>
-                <a href="#" class="active">
-                    <i class="fa-solid fa-house"></i>
-                    <span>Home</span>
-                </a>
-
-                <a href="#">
-                    <i class="fa-solid fa-magnifying-glass"></i>
-                    <span>Search</span>
-                </a>
-
-                <a href="#">
-                    <i class="fa-solid fa-location-dot"></i>
-                    <span>Map</span>
-                </a>
-
-                <a href="#">
-                    <i class="fa-solid fa-gear"></i>
-                    <span>Settings</span>
-                </a>
-
-                <a href="#">
-                    <i class="fa-solid fa-circle-info"></i>
-                    <span>About</span>
-                </a>
-            </nav>
-
-        </aside>
+        </header>
 
 
-        <!-- Main Content -->
-        <main class="main-content">
+        <!-- ================= HOME PAGE ================= -->
 
-            <!-- Top Bar -->
-            <header class="top-bar">
+        <section class="page-section active" id="home">
 
-                <div class="search-box">
-                    <i class="fa-solid fa-magnifying-glass"></i>
-                    <input type="text" placeholder="Search for a city...">
-                    <button>Search</button>
-                </div>
+            <div class="dashboard">
 
-                <div class="location">
-                    <i class="fa-solid fa-location-dot"></i>
-                    <span>Colombo, Sri Lanka</span>
-                    <i class="fa-solid fa-chevron-down"></i>
-                </div>
+                <!-- CURRENT WEATHER -->
 
-                <button class="refresh-btn">
-                    <i class="fa-solid fa-rotate"></i>
-                </button>
-
-            </header>
-
-
-            <!-- Weather Dashboard -->
-            <section class="dashboard">
-
-                <!-- Current Weather -->
                 <div class="current-weather">
 
                     <div class="weather-info">
 
-                        <p class="date">
-                            Today, 9 November 2026
-                        </p>
+                        <p class="date" id="currentDate">Today</p>
 
-                        <h2>
+                        <h2 id="cityName">
                             <i class="fa-solid fa-location-dot"></i>
                             Colombo
                         </h2>
 
-                        <div class="temperature">
+                        <div class="temperature" id="temperature">
                             28<span>°C</span>
                         </div>
 
-                        <h3>Partly Cloudy</h3>
+                        <h3 id="weatherCondition">Partly Cloudy</h3>
 
-                        <p class="feels-like">
-                            <i class="fa-solid fa-temperature-half"></i>
+                        <p class="feels-like" id="feelsLike">
                             Feels like 31°C
                         </p>
 
                     </div>
 
-                    <div class="weather-icon">
+                    <div class="weather-icon" id="weatherIcon">
                         <i class="fa-solid fa-cloud-sun"></i>
                     </div>
 
                 </div>
 
 
-                <!-- Weather Details -->
+                <!-- WEATHER DETAILS -->
+
                 <div class="weather-details">
 
                     <div class="detail-card">
                         <i class="fa-solid fa-droplet"></i>
-
                         <div>
                             <p>Humidity</p>
-                            <h3>78%</h3>
+                            <h3 id="humidity">78%</h3>
                         </div>
                     </div>
-
 
                     <div class="detail-card">
                         <i class="fa-solid fa-wind"></i>
-
                         <div>
                             <p>Wind Speed</p>
-                            <h3>14 km/h</h3>
+                            <h3 id="windSpeed">14 km/h</h3>
                         </div>
                     </div>
-
 
                     <div class="detail-card">
                         <i class="fa-solid fa-compass"></i>
-
                         <div>
                             <p>Wind Direction</p>
-                            <h3>NW</h3>
+                            <h3 id="windDirection">NW</h3>
                         </div>
                     </div>
 
-
                     <div class="detail-card">
                         <i class="fa-solid fa-gauge-high"></i>
-
                         <div>
                             <p>Pressure</p>
-                            <h3>1012 hPa</h3>
+                            <h3 id="pressure">1012 hPa</h3>
                         </div>
                     </div>
 
                 </div>
 
 
-                <!-- Hourly Forecast -->
+                <!-- HOURLY FORECAST -->
+
                 <section class="forecast-section">
 
                     <div class="section-title">
@@ -175,55 +179,20 @@
                             <i class="fa-regular fa-clock"></i>
                             Hourly Forecast
                         </h2>
-
-                        <a href="#">Next 6 Hours →</a>
+                        <span>Next 6 Hours</span>
                     </div>
 
+                    <div class="hourly-forecast" id="hourlyForecast">
 
-                    <div class="hourly-forecast">
-
-                        <div class="hour">
-                            <p>12 PM</p>
-                            <i class="fa-solid fa-sun"></i>
-                            <h3>29°C</h3>
-                        </div>
-
-                        <div class="hour">
-                            <p>1 PM</p>
-                            <i class="fa-solid fa-sun"></i>
-                            <h3>30°C</h3>
-                        </div>
-
-                        <div class="hour">
-                            <p>2 PM</p>
-                            <i class="fa-solid fa-cloud-sun"></i>
-                            <h3>30°C</h3>
-                        </div>
-
-                        <div class="hour">
-                            <p>3 PM</p>
-                            <i class="fa-solid fa-cloud-sun"></i>
-                            <h3>29°C</h3>
-                        </div>
-
-                        <div class="hour">
-                            <p>4 PM</p>
-                            <i class="fa-solid fa-cloud"></i>
-                            <h3>28°C</h3>
-                        </div>
-
-                        <div class="hour">
-                            <p>5 PM</p>
-                            <i class="fa-solid fa-cloud-rain"></i>
-                            <h3>27°C</h3>
-                        </div>
+                        <!-- JavaScript creates forecast items -->
 
                     </div>
 
                 </section>
 
 
-                <!-- 5 Day Forecast -->
+                <!-- FIVE DAY FORECAST -->
+
                 <section class="forecast-section">
 
                     <div class="section-title">
@@ -233,52 +202,171 @@
                         </h2>
                     </div>
 
+                    <div class="five-day-forecast" id="dailyForecast">
 
-                    <div class="five-day-forecast">
-
-                        <div class="day">
-                            <p>Mon, Nov 9</p>
-                            <i class="fa-solid fa-cloud-sun"></i>
-                            <h3>27° / 31°</h3>
-                        </div>
-
-                        <div class="day">
-                            <p>Tue, Nov 10</p>
-                            <i class="fa-solid fa-cloud-rain"></i>
-                            <h3>26° / 30°</h3>
-                        </div>
-
-                        <div class="day">
-                            <p>Wed, Nov 11</p>
-                            <i class="fa-solid fa-sun"></i>
-                            <h3>25° / 29°</h3>
-                        </div>
-
-                        <div class="day">
-                            <p>Thu, Nov 12</p>
-                            <i class="fa-solid fa-cloud"></i>
-                            <h3>24° / 28°</h3>
-                        </div>
-
-                        <div class="day">
-                            <p>Fri, Nov 13</p>
-                            <i class="fa-solid fa-sun"></i>
-                            <h3>25° / 30°</h3>
-                        </div>
+                        <!-- JavaScript creates forecast items -->
 
                     </div>
 
                 </section>
 
-            </section>
+            </div>
 
-        </main>
+        </section>
 
-    </div>
 
-    <!-- JavaScript -->
-    <script src="script.js"></script>
+        <!-- ================= SEARCH PAGE ================= -->
+
+        <section class="page-section" id="search">
+
+            <div class="page-heading">
+                <h2><i class="fa-solid fa-magnifying-glass"></i> Search Weather</h2>
+                <p>Find real-time weather information for any city.</p>
+            </div>
+
+            <form id="citySearchForm" class="large-search">
+
+                <input type="text" id="citySearchInput"
+                    placeholder="Enter city name..." required>
+
+                <button type="submit">
+                    <i class="fa-solid fa-search"></i> Search
+                </button>
+
+            </form>
+
+            <div id="searchResult" class="search-result">
+                <i class="fa-solid fa-cloud-sun"></i>
+                <h3>Search for a city</h3>
+                <p>Enter a city name to discover its weather.</p>
+            </div>
+
+        </section>
+
+
+        <!-- ================= MAP PAGE ================= -->
+
+        <section class="page-section" id="map">
+
+            <div class="page-heading">
+                <h2><i class="fa-solid fa-map-location-dot"></i> Weather Map</h2>
+                <p>Explore the location of your selected city.</p>
+            </div>
+
+            <div class="map-info">
+                <i class="fa-solid fa-location-dot"></i>
+                <span id="mapCityName">Colombo, Sri Lanka</span>
+            </div>
+
+            <iframe
+                id="weatherMap"
+                title="Weather location map"
+                src="https://www.openstreetmap.org/export/embed.html?bbox=79.7%2C6.7%2C80.1%2C7.1&layer=mapnik"
+                loading="lazy">
+            </iframe>
+
+            <p class="map-note">
+                Map provided by OpenStreetMap.
+            </p>
+
+        </section>
+
+
+        <!-- ================= SETTINGS PAGE ================= -->
+
+        <section class="page-section" id="settings">
+
+            <div class="page-heading">
+                <h2><i class="fa-solid fa-gear"></i> Settings</h2>
+                <p>Customize your WeatherX experience.</p>
+            </div>
+
+            <div class="settings-card">
+
+                <div>
+                    <h3>Temperature Unit</h3>
+                    <p>Choose your preferred temperature unit.</p>
+                </div>
+
+                <select id="temperatureUnit">
+                    <option value="celsius">Celsius (°C)</option>
+                    <option value="fahrenheit">Fahrenheit (°F)</option>
+                </select>
+
+            </div>
+
+            <div class="settings-card">
+
+                <div>
+                    <h3>Application</h3>
+                    <p>WeatherX version</p>
+                </div>
+
+                <span class="version">Version 1.0</span>
+
+            </div>
+
+        </section>
+
+
+        <!-- ================= ABOUT PAGE ================= -->
+
+        <section class="page-section" id="about">
+
+            <div class="about-card">
+
+                <div class="about-logo">
+                    <i class="fa-solid fa-cloud-sun"></i>
+                </div>
+
+                <h1>Weather<span>X</span></h1>
+
+                <p class="about-tagline">
+                    Know the Weather. Plan Your Day.
+                </p>
+
+                <p>
+                    WeatherX is a modern weather application
+                    designed to help users discover weather
+                    conditions around the world.
+                </p>
+
+                <div class="about-features">
+
+                    <div>
+                        <i class="fa-solid fa-cloud-sun"></i>
+                        <span>Live Weather</span>
+                    </div>
+
+                    <div>
+                        <i class="fa-solid fa-calendar-days"></i>
+                        <span>Weather Forecast</span>
+                    </div>
+
+                    <div>
+                        <i class="fa-solid fa-map"></i>
+                        <span>City Locations</span>
+                    </div>
+
+                </div>
+
+                <p class="copyright">
+                    © 2026 WeatherX. All Rights Reserved.
+                </p>
+
+                <p class="powered">
+                    Weather data powered by JaniX.
+                </p>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+<script src="app.js"></script>
 
 </body>
-
 </html>
