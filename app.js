@@ -1,741 +1,317 @@
 
+// =====================================
+// 1. GET HTML ELEMENTS
+// =====================================
 
+const cityInput = document.getElementById("cityInput");
+const searchBtn = document.getElementById("searchBtn");
 
-// 1. SELECT HTML ELEMENTS
-// ==========================================
-
-const navLinks = document.querySelectorAll(".nav-link");
-const pages = document.querySelectorAll(".page-section");
-
-const topSearchForm = document.getElementById("topSearchForm");
-const topSearchInput = document.getElementById("topSearchInput");
-
-const citySearchForm = document.getElementById("citySearchForm");
-const citySearchInput = document.getElementById("citySearchInput");
-
-const refreshButton = document.getElementById("refreshButton");
 
 const cityName = document.getElementById("cityName");
 const temperature = document.getElementById("temperature");
-const weatherCondition = document.getElementById("weatherCondition");
+const description = document.getElementById("description");
 const feelsLike = document.getElementById("feelsLike");
-const weatherIcon = document.getElementById("weatherIcon");
-const currentDate = document.getElementById("currentDate");
-
-const currentLocation = document.getElementById("currentLocation");
 
 const humidity = document.getElementById("humidity");
-const windSpeed = document.getElementById("windSpeed");
-const windDirection = document.getElementById("windDirection");
+const wind = document.getElementById("wind");
 const pressure = document.getElementById("pressure");
+const visibility = document.getElementById("visibility");
 
-const hourlyForecast = document.getElementById("hourlyForecast");
-const dailyForecast = document.getElementById("dailyForecast");
-
-const temperatureUnit = document.getElementById("temperatureUnit");
-
-const searchResult = document.getElementById("searchResult");
-
-const mapCityName = document.getElementById("mapCityName");
-const weatherMap = document.getElementById("weatherMap");
+const sunrise = document.getElementById("sunrise");
+const sunset = document.getElementById("sunset");
 
 
-// 2. APPLICATION VARIABLES
-// ==========================================
+// =====================================
+// 2. WEATHER DESCRIPTION
+// =====================================
 
-let currentWeatherData = null;
+function getWeatherDescription(code) {
 
-let currentCity = "Colombo";
-let currentCountry = "Sri Lanka";
+    if (code === 0) return "Clear Sky";
+    if (code <= 3) return "Partly Cloudy";
+    if (code <= 48) return "Foggy";
+    if (code <= 57) return "Drizzle";
+    if (code <= 67) return "Rainy";
+    if (code <= 77) return "Snowy";
+    if (code <= 82) return "Rain Showers";
+    if (code <= 86) return "Snow Showers";
+    if (code >= 95) return "Thunderstorm";
 
-let currentLatitude = 6.9271;
-let currentLongitude = 79.8612;
-
-let selectedUnit =
-    localStorage.getItem("weatherUnit") || "celsius";
-
-
-// 3. NAVIGATION SYSTEM
-// ==========================================
-
-function showPage(pageName) {
-
-    const selectedLink = document.querySelector(
-        `.nav-link[data-page="${pageName}"]`
-    );
-
-    const selectedPage = document.getElementById(pageName);
-
-    if (!selectedLink || !selectedPage) {
-        pageName = "home";
-    }
-
-    // Remove active classes
-
-    navLinks.forEach(link => {
-        link.classList.remove("active");
-    });
-
-    pages.forEach(page => {
-        page.classList.remove("active");
-    });
-
-    // Activate selected page
-
-    document.querySelector(
-        `.nav-link[data-page="${pageName}"]`
-    ).classList.add("active");
-
-    document.getElementById(pageName).classList.add("active");
-
-    // Update URL
-
-    if (window.location.hash !== `#${pageName}`) {
-        history.pushState(null, "", `#${pageName}`);
-    }
-
-    window.scrollTo({
-        top: 0,
-        behavior: "smooth"
-    });
-
+    return "Unknown Weather";
 }
 
 
-// Navigation click events
+// =====================================
+// 3. SEARCH CITY
+// =====================================
 
-navLinks.forEach(link => {
+async function searchWeather() {
 
-    link.addEventListener("click", function(event) {
+    const city = cityInput.value.trim();
 
-        event.preventDefault();
-
-        showPage(this.dataset.page);
-
-    });
-
-});
-
-
-// Browser back and forward
-
-window.addEventListener("popstate", () => {
-
-    const pageName =
-        window.location.hash.replace("#", "") || "home";
-
-    showPage(pageName);
-
-});
-
-
-// 4. WEATHER CONDITIONS
-// ==========================================
-
-function getWeatherInfo(code) {
-
-    const conditions = {
-
-        0: ["Clear Sky", "fa-sun"],
-        1: ["Mainly Clear", "fa-sun"],
-        2: ["Partly Cloudy", "fa-cloud-sun"],
-        3: ["Overcast", "fa-cloud"],
-
-        45: ["Foggy", "fa-smog"],
-        48: ["Rime Fog", "fa-smog"],
-
-        51: ["Light Drizzle", "fa-cloud-rain"],
-        53: ["Drizzle", "fa-cloud-rain"],
-        55: ["Heavy Drizzle", "fa-cloud-showers-heavy"],
-
-        61: ["Light Rain", "fa-cloud-rain"],
-        63: ["Rain", "fa-cloud-showers-heavy"],
-        65: ["Heavy Rain", "fa-cloud-showers-heavy"],
-
-        71: ["Light Snow", "fa-snowflake"],
-        73: ["Snow", "fa-snowflake"],
-        75: ["Heavy Snow", "fa-snowflake"],
-
-        80: ["Rain Showers", "fa-cloud-showers-heavy"],
-        81: ["Heavy Showers", "fa-cloud-showers-heavy"],
-        82: ["Violent Showers", "fa-cloud-showers-heavy"],
-
-        95: ["Thunderstorm", "fa-bolt"],
-        96: ["Thunderstorm", "fa-cloud-bolt"],
-        99: ["Heavy Thunderstorm", "fa-cloud-bolt"]
-
-    };
-
-    return conditions[code] || ["Unknown", "fa-cloud"];
-
-}
-
-
-// 5. WEATHER ICON
-// ==========================================
-
-function updateIcon(element, code, isDay = 1) {
-
-    const info = getWeatherInfo(code);
-
-    let icon = info[1];
-
-    if (code === 0 || code === 1) {
-
-        icon = isDay ? "fa-sun" : "fa-moon";
-
-    }
-
-    if (code === 2 && !isDay) {
-
-        icon = "fa-cloud-moon";
-
-    }
-
-    if (element.classList.contains("weather-icon")) {
-
-        element.innerHTML =
-            `<i class="fa-solid ${icon}"></i>`;
-
-    } else {
-
-        element.className = `fa-solid ${icon}`;
-
-    }
-
-}
-
-
-// 6. TEMPERATURE CONVERSION
-// ==========================================
-
-function convertTemperature(value) {
-
-    if (selectedUnit === "fahrenheit") {
-
-        return Math.round((value * 9 / 5) + 32);
-
-    }
-
-    return Math.round(value);
-
-}
-
-
-function getTemperatureSymbol() {
-
-    return selectedUnit === "fahrenheit" ? "°F" : "°C";
-
-}
-
-
-// 7. SEARCH CITY
-// ==========================================
-
-async function searchCity(cityQuery) {
-
-    if (!cityQuery.trim()) {
-
+    if (city === "") {
         alert("Please enter a city name!");
-
-        return false;
-
+        return;
     }
 
     try {
 
+        searchBtn.disabled = true;
+
+        // Find city coordinates
         const geoURL =
-            `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(cityQuery)}&count=1&language=en&format=json`;
+            `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(city)}&count=1&language=en&format=json`;
 
         const geoResponse = await fetch(geoURL);
 
         if (!geoResponse.ok) {
-
-            throw new Error("City search failed.");
-
+            throw new Error("Location search failed");
         }
 
         const geoData = await geoResponse.json();
 
         if (!geoData.results || geoData.results.length === 0) {
-
-            throw new Error("City not found! Try another city.");
-
+            alert("City not found!");
+            return;
         }
 
-        const place = geoData.results[0];
+        const location = geoData.results[0];
 
-        const foundCity = place.name;
-        const country = place.country || "";
-
-        const latitude = place.latitude;
-        const longitude = place.longitude;
-
+        // Get weather using coordinates
         await getWeather(
-            latitude,
-            longitude,
-            foundCity,
-            country
+            location.latitude,
+            location.longitude,
+            location.name,
+            location.country
         );
 
-        showSearchResult(foundCity, country);
+    }
 
-        return true;
+    catch (error) {
 
-    } catch (error) {
+        console.log(error);
+        alert("Something went wrong. Check your internet connection.");
 
-        console.error("WeatherX Error:", error);
+    }
 
-        alert(error.message);
-
-        return false;
-
+    finally {
+        searchBtn.disabled = false;
     }
 
 }
 
 
-// 8. GET WEATHER DATA
-// ==========================================
+// =====================================
+// 4. GET WEATHER DATA
+// =====================================
 
-async function getWeather(latitude, longitude, city, country) {
+async function getWeather(lat, lon, name, country) {
 
     const weatherURL =
-        `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,relative_humidity_2m,apparent_temperature,is_day,weather_code,wind_speed_10m,wind_direction_10m,surface_pressure&hourly=temperature_2m,weather_code&daily=weather_code,temperature_2m_max,temperature_2m_min&forecast_days=5&timezone=auto`;
+        `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,relative_humidity_2m,apparent_temperature,is_day,weather_code,pressure_msl,wind_speed_10m&daily=sunrise,sunset,weather_code,temperature_2m_max,temperature_2m_min&timezone=auto&forecast_days=5`;
 
     const response = await fetch(weatherURL);
 
     if (!response.ok) {
-
-        throw new Error("Unable to get weather information.");
-
+        throw new Error("Weather data unavailable");
     }
 
     const data = await response.json();
 
-    // Save weather information
+    // Update city name
+    cityName.textContent = `${name}, ${country}`;
 
-    currentWeatherData = data;
+    // Update temperature
+    temperature.textContent =
+        Math.round(data.current.temperature_2m) + "°C";
 
-    currentCity = city;
-    currentCountry = country;
+    // Update description
+    description.textContent =
+        getWeatherDescription(data.current.weather_code);
 
-    currentLatitude = latitude;
-    currentLongitude = longitude;
+    // Update feels like
+    feelsLike.textContent =
+        "Feels like " +
+        Math.round(data.current.apparent_temperature) + "°C";
 
-    // Update all sections
-
-    updateCurrentWeather();
-
-    updateHourlyForecast();
-
-    updateDailyForecast();
-
-    updateMap();
-
-}
-
-
-// 9. CURRENT WEATHER
-// ==========================================
-
-function updateCurrentWeather() {
-
-    if (!currentWeatherData) return;
-
-    const current = currentWeatherData.current;
-
-    const weather = getWeatherInfo(current.weather_code);
-
-    const symbol = getTemperatureSymbol();
-
-    // City name
-
-    cityName.innerHTML =
-        `<i class="fa-solid fa-location-dot"></i>`;
-
-    cityName.appendChild(
-        document.createTextNode(" " + currentCity)
-    );
-
-    currentLocation.textContent =
-        `${currentCity}, ${currentCountry}`;
-
-    // Temperature
-
-    temperature.innerHTML =
-        `${convertTemperature(current.temperature_2m)}<span>${symbol}</span>`;
-
-    // Weather condition
-
-    weatherCondition.textContent = weather[0];
-
-    // Feels like
-
-    feelsLike.innerHTML =
-        `<i class="fa-solid fa-temperature-half"></i>
-        Feels like ${convertTemperature(current.apparent_temperature)}${symbol}`;
-
-    // Weather icon
-
-    updateIcon(
-        weatherIcon,
-        current.weather_code,
-        current.is_day
-    );
-
-    // Date
-
-    const date = new Date(current.time);
-
-    currentDate.textContent =
-        date.toLocaleDateString("en-US", {
-            weekday: "long",
-            day: "numeric",
-            month: "long",
-            year: "numeric"
-        });
-
-    // Humidity
-
+    // Update humidity
     humidity.textContent =
-        `${current.relative_humidity_2m}%`;
+        data.current.relative_humidity_2m + "%";
 
-    // Wind speed
+    // Update wind
+    wind.textContent =
+        data.current.wind_speed_10m + " km/h";
 
-    windSpeed.textContent =
-        `${current.wind_speed_10m} km/h`;
-
-    // Wind direction
-
-    windDirection.textContent =
-        getWindDirection(current.wind_direction_10m);
-
-    // Pressure
-
+    // Update pressure
     pressure.textContent =
-        `${Math.round(current.surface_pressure)} hPa`;
+        data.current.pressure_msl + " hPa";
 
-}
+    // Update visibility
+    visibility.textContent = "Not available";
 
-
-// 10. WIND DIRECTION
-// ==========================================
-
-function getWindDirection(degrees) {
-
-    const directions = [
-        "N", "NE", "E", "SE",
-        "S", "SW", "W", "NW"
-    ];
-
-    const index = Math.round(degrees / 45) % 8;
-
-    return directions[index];
-
-}
-
-
-// 11. HOURLY FORECAST
-// ==========================================
-
-function updateHourlyForecast() {
-
-    const hourly = currentWeatherData.hourly;
-
-    const currentTime = currentWeatherData.current.time;
-
-    let startIndex = hourly.time.findIndex(time =>
-
-        time.slice(0, 13) === currentTime.slice(0, 13)
-
-    );
-
-    if (startIndex === -1) {
-
-        startIndex = 0;
-
-    }
-
-    hourlyForecast.innerHTML = "";
-
-    for (let i = startIndex; i < startIndex + 6; i++) {
-
-        if (i >= hourly.time.length) break;
-
-        const time = new Date(hourly.time[i]);
-
-        const timeText = time.toLocaleTimeString("en-US", {
-            hour: "numeric",
-            hour12: true
-        });
-
-        const info = getWeatherInfo(hourly.weather_code[i]);
-
-        const hourCard = document.createElement("div");
-
-        hourCard.className = "hour";
-
-        const timeElement = document.createElement("p");
-
-        timeElement.textContent = timeText;
-
-        const icon = document.createElement("i");
-
-        icon.className = `fa-solid ${info[1]}`;
-
-        const tempElement = document.createElement("h3");
-
-        tempElement.textContent =
-            `${convertTemperature(hourly.temperature_2m[i])}${getTemperatureSymbol()}`;
-
-        hourCard.append(
-            timeElement,
-            icon,
-            tempElement
+    // Update sunrise
+    sunrise.textContent =
+        new Date(data.daily.sunrise[0]).toLocaleTimeString(
+            "en-US",
+            { hour: "2-digit", minute: "2-digit" }
         );
 
-        hourlyForecast.appendChild(hourCard);
+    // Update sunset
+    sunset.textContent =
+        new Date(data.daily.sunset[0]).toLocaleTimeString(
+            "en-US",
+            { hour: "2-digit", minute: "2-digit" }
+        );
 
-    }
+    // Update date
+    document.getElementById("date").textContent =
+        new Date(data.current.time).toLocaleDateString(
+            "en-US",
+            {
+                weekday: "long",
+                day: "numeric",
+                month: "long",
+                year: "numeric"
+            }
+        );
+
+    // Update 5 day forecast
+    updateForecast(data.daily);
 
 }
 
 
-// 12. FIVE DAY FORECAST
-// ==========================================
+// =====================================
+// 5. UPDATE 5 DAY FORECAST
+// =====================================
 
-function updateDailyForecast() {
+function updateForecast(daily) {
 
-    const daily = currentWeatherData.daily;
+    const forecastGrid =
+        document.querySelector(".forecast-grid");
 
-    dailyForecast.innerHTML = "";
+    forecastGrid.innerHTML = "";
 
     for (let i = 0; i < daily.time.length; i++) {
 
-        const date = new Date(
-            `${daily.time[i]}T12:00:00`
+        const day = new Date(daily.time[i]);
+
+        const dayName = day.toLocaleDateString(
+            "en-US",
+            { weekday: "long" }
         );
 
-        const dayText = date.toLocaleDateString("en-US", {
-            weekday: "short",
-            month: "short",
-            day: "numeric"
-        });
-
-        const info = getWeatherInfo(daily.weather_code[i]);
-
-        const dayCard = document.createElement("div");
-
-        dayCard.className = "day";
-
-        const dateElement = document.createElement("p");
-
-        dateElement.textContent = dayText;
-
-        const icon = document.createElement("i");
-
-        icon.className = `fa-solid ${info[1]}`;
-
-        const tempElement = document.createElement("h3");
-
-        const min = convertTemperature(
-            daily.temperature_2m_min[i]
+        const weather = getWeatherDescription(
+            daily.weather_code[i]
         );
 
-        const max = convertTemperature(
+        const maxTemp = Math.round(
             daily.temperature_2m_max[i]
         );
 
-        tempElement.textContent =
-            `${min}${getTemperatureSymbol()} / ${max}${getTemperatureSymbol()}`;
-
-        dayCard.append(
-            dateElement,
-            icon,
-            tempElement
+        const minTemp = Math.round(
+            daily.temperature_2m_min[i]
         );
 
-        dailyForecast.appendChild(dayCard);
+        const card = document.createElement("div");
+
+        card.className = "forecast-card";
+
+        card.innerHTML = `
+            <p>${dayName}</p>
+            <i class="fa-solid fa-cloud-sun"></i>
+            <h3>${maxTemp}°C</h3>
+            <p>${weather}</p>
+            <small>${minTemp}°C Min</small>
+        `;
+
+        forecastGrid.appendChild(card);
 
     }
 
 }
 
 
-// 13. UPDATE MAP
-// ==========================================
+// =====================================
+// 6. SEARCH BUTTON
+// =====================================
 
-function updateMap() {
-
-    const padding = 0.15;
-
-    const bbox = [
-        currentLongitude - padding,
-        currentLatitude - padding,
-        currentLongitude + padding,
-        currentLatitude + padding
-    ].join(",");
-
-    weatherMap.src =
-        `https://www.openstreetmap.org/export/embed.html?bbox=${encodeURIComponent(bbox)}&layer=mapnik&marker=${currentLatitude},${currentLongitude}`;
-
-    mapCityName.textContent =
-        `${currentCity}, ${currentCountry}`;
-
-}
+searchBtn.addEventListener("click", searchWeather);
 
 
-// 14. SEARCH RESULT
-// ==========================================
+// Enter key
+cityInput.addEventListener("keydown", function(event) {
 
-function showSearchResult(city, country) {
+    if (event.key === "Enter") {
+        searchWeather();
+    }
 
-    const current = currentWeatherData.current;
+});
 
-    const info = getWeatherInfo(current.weather_code);
 
-    searchResult.innerHTML = "";
+// =====================================
+// 7. CURRENT LOCATION
+// =====================================
 
-    const icon = document.createElement("i");
+locationBtn.addEventListener("click", function() {
 
-    icon.className = `fa-solid ${info[1]}`;
+    if (!navigator.geolocation) {
 
-    const heading = document.createElement("h3");
+        alert("Location is not supported by your browser.");
+        return;
 
-    heading.textContent = `${city}, ${country}`;
+    }
 
-    const description = document.createElement("p");
+    navigator.geolocation.getCurrentPosition(
 
-    description.textContent =
-        `${convertTemperature(current.temperature_2m)}${getTemperatureSymbol()} - ${info[0]}`;
+        async function(position) {
 
-    const button = document.createElement("button");
+            const lat = position.coords.latitude;
+            const lon = position.coords.longitude;
 
-    button.textContent = "View Weather Dashboard";
+            try {
 
-    button.addEventListener("click", () => {
+                await getWeather(
+                    lat,
+                    lon,
+                    "Your Current Location",
+                    ""
+                );
 
-        showPage("home");
+            }
 
-    });
+            catch (error) {
 
-    searchResult.append(
-        icon,
-        heading,
-        description,
-        button
+                alert("Unable to get weather data.");
+
+            }
+
+        },
+
+        function() {
+
+            alert("Please allow location permission.");
+
+        }
+
     );
 
-}
-
-
-// 15. TOP SEARCH
-// ==========================================
-
-topSearchForm.addEventListener("submit", async function(event) {
-
-    event.preventDefault();
-
-    const city = topSearchInput.value.trim();
-
-    const success = await searchCity(city);
-
-    if (success) {
-
-        showPage("home");
-
-        topSearchInput.value = "";
-
-    }
-
 });
 
 
-// 16. SEARCH PAGE
-// ==========================================
+// =====================================
+// 8. DEFAULT WEATHER
+// =====================================
 
-citySearchForm.addEventListener("submit", async function(event) {
+// Load Colombo weather when app opens
 
-    event.preventDefault();
+getWeather(
+    6.9271,
+    79.8612,
+    "Colombo",
+    "Sri Lanka"
+).catch(error => {
 
-    const city = citySearchInput.value.trim();
-
-    await searchCity(city);
-
-});
-
-
-// 17. REFRESH WEATHER
-// ==========================================
-
-refreshButton.addEventListener("click", async function() {
-
-    if (!currentWeatherData) return;
-
-    try {
-
-        refreshButton.classList.add("loading");
-
-        await getWeather(
-            currentLatitude,
-            currentLongitude,
-            currentCity,
-            currentCountry
-        );
-
-    } catch (error) {
-
-        alert(error.message);
-
-    } finally {
-
-        refreshButton.classList.remove("loading");
-
-    }
+    console.log("Weather loading failed:", error);
 
 });
-
-
-// 18. TEMPERATURE SETTINGS
-// ==========================================
-
-temperatureUnit.value = selectedUnit;
-
-temperatureUnit.addEventListener("change", function() {
-
-    selectedUnit = this.value;
-
-    localStorage.setItem("weatherUnit", selectedUnit);
-
-    if (currentWeatherData) {
-
-        updateCurrentWeather();
-
-        updateHourlyForecast();
-
-        updateDailyForecast();
-
-    }
-
-});
-
-
-// 19. INITIAL PAGE
-// ==========================================
-
-const initialPage =
-    window.location.hash.replace("#", "") || "home";
-
-showPage(initialPage);
-
-
-// 20. LOAD DEFAULT WEATHER
-// ==========================================
-
-searchCity("Colombo");
-
-
-// ==========================================
-// END OF WEATHERX
-// ==========================================
