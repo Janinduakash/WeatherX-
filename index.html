@@ -1,0 +1,309 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>WeatherX | Weather App</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+</head>
+
+<body>
+
+    <!-- Main Wrapper -->
+    <div class="container">
+
+        <!-- Sidebar -->
+        <aside class="sidebar">
+
+            <div class="logo">
+                <i class="fa-solid fa-cloud-sun"></i>
+                <h2>WeatherX</h2>
+            </div>
+
+            <nav>
+                <a href="#home" class="active">
+                    <i class="fa-solid fa-house"></i>
+                    Home
+                </a>
+
+                <a href="#forecast">
+                    <i class="fa-solid fa-calendar-days"></i>
+                    Forecast
+                </a>
+
+                <a href="#details">
+                    <i class="fa-solid fa-chart-line"></i>
+                    Weather Details
+                </a>
+
+                <a href="#about">
+                    <i class="fa-solid fa-circle-info"></i>
+                    About
+                </a>
+            </nav>
+
+            <div class="sidebar-bottom">
+                <p>WeatherX App</p>
+                <small>Version 1.0.0</small>
+            </div>
+
+        </aside>
+
+
+        <!-- Main Content -->
+        <main class="main-content">
+
+            <!-- Top Header -->
+            <header class="top-header">
+
+                <div class="welcome">
+                    <h1>Weather Dashboard</h1>
+                    <p>Welcome! Check today's weather.</p>
+                </div>
+
+                <div class="search-box">
+
+                    <input
+                        type="text"
+                        id="cityInput"
+                        placeholder="Search city..."
+                    >
+
+                    <button id="searchBtn">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                    </button>
+
+
+
+                </div>
+
+            </header>
+
+
+            <!-- Current Weather Section -->
+            <section id="home" class="current-weather">
+
+                <div class="section-title">
+                    <h2>Current Weather</h2>
+                    <p id="date">Monday, 09 November 2026</p>
+                </div>
+
+                <div class="weather-card">
+
+                    <div class="weather-info">
+
+                        <h2 id="cityName">Colombo, Sri Lanka</h2>
+
+                        <p id="description">Partly Cloudy</p>
+
+                        <h1 id="temperature">28°C</h1>
+
+                        <p id="feelsLike">Feels like 30°C</p>
+
+                    </div>
+
+                    <div class="weather-image">
+
+                        <i class="fa-solid fa-cloud-sun"></i>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- Weather Details -->
+            <section id="details" class="weather-details">
+
+                <h2>Today's Highlights</h2>
+
+                <div class="details-grid">
+
+                    <div class="detail-card">
+
+                        <div class="detail-header">
+                            <p>Humidity</p>
+                            <i class="fa-solid fa-droplet"></i>
+                        </div>
+
+                        <h2 id="humidity">75%</h2>
+
+                        <p>Air moisture level</p>
+
+                    </div>
+
+
+                    <div class="detail-card">
+
+                        <div class="detail-header">
+                            <p>Wind Speed</p>
+                            <i class="fa-solid fa-wind"></i>
+                        </div>
+
+                        <h2 id="wind">12 km/h</h2>
+
+                        <p>Current wind speed</p>
+
+                    </div>
+
+
+                    <div class="detail-card">
+
+                        <div class="detail-header">
+                            <p>Pressure</p>
+                            <i class="fa-solid fa-gauge"></i>
+                        </div>
+
+                        <h2 id="pressure">1012 hPa</h2>
+
+                        <p>Atmospheric pressure</p>
+
+                    </div>
+
+
+                    <div class="detail-card">
+
+                        <div class="detail-header">
+                            <p>Visibility</p>
+                            <i class="fa-solid fa-eye"></i>
+                        </div>
+
+                        <h2 id="visibility">10 km</h2>
+
+                        <p>Visibility distance</p>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- Sunrise and Sunset -->
+            <section class="sun-section">
+
+                <h2>Sunrise & Sunset</h2>
+
+                <div class="sun-grid">
+
+                    <div class="sun-card">
+
+                        <i class="fa-solid fa-sun"></i>
+
+                        <div>
+                            <p>Sunrise</p>
+                            <h3 id="sunrise">06:00 AM</h3>
+                        </div>
+
+                    </div>
+
+
+                    <div class="sun-card">
+
+                        <i class="fa-solid fa-moon"></i>
+
+                        <div>
+                            <p>Sunset</p>
+                            <h3 id="sunset">06:15 PM</h3>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- 5 Day Forecast -->
+            <section id="forecast" class="forecast-section">
+
+                <h2>5-Day Forecast</h2>
+
+                <div class="forecast-grid">
+
+                    <div class="forecast-card">
+                        <p>Tuesday</p>
+                        <i class="fa-solid fa-sun"></i>
+                        <h3>30°C</h3>
+                        <p>Sunny</p>
+                    </div>
+
+                    <div class="forecast-card">
+                        <p>Wednesday</p>
+                        <i class="fa-solid fa-cloud-sun"></i>
+                        <h3>28°C</h3>
+                        <p>Cloudy</p>
+                    </div>
+
+                    <div class="forecast-card">
+                        <p>Thursday</p>
+                        <i class="fa-solid fa-cloud-rain"></i>
+                        <h3>26°C</h3>
+                        <p>Rainy</p>
+                    </div>
+
+                    <div class="forecast-card">
+                        <p>Friday</p>
+                        <i class="fa-solid fa-cloud"></i>
+                        <h3>27°C</h3>
+                        <p>Cloudy</p>
+                    </div>
+
+                    <div class="forecast-card">
+                        <p>Saturday</p>
+                        <i class="fa-solid fa-sun"></i>
+                        <h3>31°C</h3>
+                        <p>Sunny</p>
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- About Section -->
+            <section id="about" class="about-section">
+
+                <h2>About WeatherX</h2>
+
+                <p>
+                    WeatherX is a simple and modern weather application.
+                    It helps users check current weather conditions,
+                    temperature, humidity, wind speed and future forecasts.
+                </p>
+
+            </section>
+
+
+            <!-- Footer -->
+            <footer>
+
+                <p>
+                    © 2026 WeatherX.
+                    Developed by Janidu Akash.
+                </p>
+
+            </footer>
+
+        </main>
+
+    </div>
+
+
+    <!-- JavaScript -->
+    <script src="app.js"></script>
+
+</body>
+
+</html>
